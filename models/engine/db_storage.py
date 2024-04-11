@@ -13,7 +13,6 @@ from models.review import Review
 from models.user import User
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-
 name2class = {
     'Amenity': Amenity,
     'City': City,
@@ -80,13 +79,12 @@ class DBStorage:
 
     def close(self):
         """Dispose of current session if active"""
-        if self.__session:
-            self.__session.close()
+        self.__session.remove()
 
     def get(self, cls, id):
         """Retrieve an object"""
-        if cls is not None and type(cls) is str and id is not None and \
-                type(id) is str and cls in name2class:
+        if cls is not None and type(cls) is str and id is not None and\
+           type(id) is str and cls in name2class:
             cls = name2class[cls]
             result = self.__session.query(cls).filter(cls.id == id).first()
             return result
